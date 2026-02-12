@@ -1,0 +1,71 @@
+1.LOGIN
+
+$ curl -X POST http://localhost:3000/auth/login -H "Content-Type: application/json" -d "{\"email\":\"yourrealemail@gmail.com\",\"password\":\"password123\"}"
+
+OUTPUT- 
+{
+    "message": "OTP sent",
+    "loginSessionId": "hwpwkk"
+}
+
+
+2.VERIFY OTP
+$ curl -c cookies.txt -X POST http://localhost:3000/auth/verify-otp -H "Content-Type: application/json" -d "{\"loginSessionId\":\"hwpwkk\",\"otp\":\"444280\"}"
+
+OUTPUT-
+{
+    "message": "OTP verified",
+    "sessionId": "hwpwkk"
+}
+
+
+3.GET TOKEN
+$ curl -b cookies.txt -X POST http://localhost:3000/auth/token
+
+OUTPUT-
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InlvdXJyZWFsZW1haWxAZ21haWwuY29tIiwic2Vzc2lvbklkIjoiaHdwd2trIiwiaWF0IjoxNzcwODc4NDAyLCJleHAiOjE3NzA4NzkzMDJ9.RIDlGEAd69q3GVN9aa56k-BlPZlGZZoUtoh9AejV0rA",
+    "expires_in": 900
+}
+
+
+4.PROTECTED ROUTE
+$ curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." http://localhost:3000/protected
+
+OUTPUT-
+{
+    "message": "Access granted",
+    "user": {
+        "email": "yourrealemail@gmail.com",
+        "sessionId": "hwpwkk",
+        "iat": 1770878402,
+        "exp": 1770879302
+    },
+    "success_flag": "FLAG-eW91cnJlYWxlbWFpbEBnbWFpbC5jb21fQ09NUExFVEVEX0FTU0lHTk1FTlQ="
+}
+
+
+
+
+
+server logs - 
+PS C:\Users\NIKHIL\Desktop\internship assinments\broken_auth_assignment> npm start
+
+> silent-server-assignment@1.0.0 start
+> node server.js
+
+Server running at http://localhost:3000
+
+POST /auth/login
+[OTP] Session hwpwkk generated. OTP: 444280
+POST /auth/login -> 200 (34ms)
+
+POST /auth/verify-otp
+POST /auth/verify-otp -> 200 (4ms)
+
+POST /auth/token
+POST /auth/token -> 200 (7ms)
+
+GET /protected
+GET /protected -> 200 (6ms)
+
